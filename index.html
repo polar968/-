@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#30451e">
+<link rel="manifest" href="manifest.json">
+<title>كُوخ إيلياء | نظام المبيعات</title>
+<style>
+:root{--green:#30451e;--green2:#415d28;--cream:#f6efe1;--paper:#fffaf0;--line:#ddd2bd;--text:#26301e;--muted:#77705f;--red:#b83a31;--shadow:0 8px 25px #26301e18}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#e9dfcb,#f8f2e7);font-family:Tahoma,Arial,sans-serif;color:var(--text)}
+button,input{font:inherit}.app{min-height:100vh;display:grid;grid-template-columns:240px 1fr}
+.sidebar{background:linear-gradient(180deg,#263817,#354d21);color:#fff;padding:18px;display:flex;flex-direction:column;gap:18px}
+.brand{text-align:center}.brand img{width:74px;height:74px;border-radius:50%;object-fit:cover;background:#eee}.brand h1{font-size:22px;margin:8px 0 2px}.brand small{opacity:.75}
+.nav{display:grid;gap:8px}.nav button{border:0;background:transparent;color:#fff;padding:13px 14px;border-radius:12px;text-align:right;cursor:pointer}.nav button.active,.nav button:hover{background:#ffffff1a}
+.main{padding:20px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.top h2{margin:0}.date{color:var(--muted)}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:1fr 390px;gap:18px}.panel{background:#fffaf2cc;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:16px}.cats{display:flex;gap:8px;overflow:auto;padding-bottom:10px}.cat{border:1px solid var(--line);background:#f9f2e4;border-radius:12px;padding:10px 15px;white-space:nowrap;cursor:pointer}.cat.active{background:var(--green);color:#fff}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:12px}.product{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden;cursor:pointer;transition:.15s}.product:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.pic{height:100px;background:linear-gradient(135deg,#7a8d50,#e7d6b6);display:flex;align-items:center;justify-content:center;font-size:38px}.pbody{padding:10px}.pname{font-weight:700;font-size:14px;min-height:38px}.price{font-weight:800;color:var(--green);margin-top:5px}
+.cart{position:sticky;top:15px}.cart h3{margin-top:0}.cart-list{display:grid;gap:8px;max-height:390px;overflow:auto}.cart-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px;background:#f8f1e3;border-radius:12px}.qty{display:flex;align-items:center;gap:5px}.qty button{border:0;background:var(--green);color:#fff;border-radius:7px;width:28px;height:28px;cursor:pointer}.total{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.total-line{display:flex;justify-content:space-between;margin:7px 0}.grand{font-size:22px;font-weight:900}.pay{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.pay button,.primary{border:0;background:var(--green);color:#fff;border-radius:12px;padding:13px;cursor:pointer}.pay button:nth-child(2){background:#596f38}.secondary{border:1px solid var(--line);background:#fff8eb;color:var(--text);border-radius:12px;padding:11px;cursor:pointer}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{background:#fffaf2;border:1px solid var(--line);padding:16px;border-radius:16px}.stat b{display:block;font-size:24px;color:var(--green);margin-top:7px}.table{width:100%;border-collapse:collapse;background:#fffaf2;border-radius:15px;overflow:hidden}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:right}.table th{background:#eef0e5}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.toolbar input,.toolbar select{border:1px solid var(--line);background:#fffaf2;border-radius:10px;padding:10px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form input,.form select{border:1px solid var(--line);border-radius:10px;padding:11px;background:#fff}.form .full{grid-column:1/-1}
+.empty{text-align:center;color:var(--muted);padding:35px}
+@media(max-width:900px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:10;display:block;padding:8px}.brand{display:flex;align-items:center;gap:8px;text-align:right}.brand img{width:44px;height:44px}.brand h1{font-size:16px}.brand small{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap;padding:9px}.main{padding:12px}.grid{grid-template-columns:1fr}.cart{position:static}.cards{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><img src="logo.png" alt="كُوخ إيلياء"><div><h1>كُوخ إيلياء</h1><small>نظام إدارة المبيعات</small></div></div>
+  <div class="nav">
+    <button class="active" data-page="sales">🏠 الرئيسية</button>
+    <button data-page="history">🧾 سجل الفواتير</button>
+    <button data-page="reports">📊 التقارير</button>
+    <button data-page="items">⚙️ إدارة الأصناف</button>
+  </div>
+</aside>
+<main class="main">
+  <div class="top"><div><h2 id="title">الكاش</h2><div class="date" id="date"></div></div><div>☕ كُوخ إيلياء</div></div>
+
+  <section id="sales" class="page active">
+    <div class="grid">
+      <div class="panel">
+        <div class="cats" id="cats"></div>
+        <div class="products" id="products"></div>
+      </div>
+      <div class="panel cart">
+        <h3>الفاتورة الحالية</h3>
+        <div id="cart" class="cart-list"></div>
+        <div class="total">
+          <div class="total-line"><span>المجموع</span><b id="subtotal">0.00 JD</b></div>
+          <div class="total-line"><span>الخصم</span><input id="discount" type="number" min="0" value="0" style="width:90px;padding:6px;border:1px solid var(--line);border-radius:8px"></div>
+          <div class="total-line grand"><span>الإجمالي</span><b id="grand">0.00 JD</b></div>
+          <div class="pay"><button onclick="checkout('كاش')">💵 دفع كاش</button><button onclick="checkout('Click')">💳 دفع Click</button></div>
+          <button class="secondary" style="width:100%;margin-top:8px" onclick="clearCart()">إلغاء الفاتورة</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="page">
+    <div class="panel"><div class="toolbar"><input id="search" placeholder="بحث برقم الفاتورة أو طريقة الدفع" oninput="renderHistory()"><button class="secondary" onclick="exportCSV()">تصدير CSV</button></div><div id="historyTable"></div></div>
+  </section>
+
+  <section id="reports" class="page">
+    <div class="cards">
+      <div class="stat">مبيعات اليوم<b id="rSales">0.00 JD</b></div>
+      <div class="stat">عدد الفواتير<b id="rCount">0</b></div>
+      <div class="stat">كاش<b id="rCash">0.00 JD</b></div>
+      <div class="stat">Click<b id="rClick">0.00 JD</b></div>
+    </div>
+    <div class="panel" style="margin-top:15px"><h3>الأصناف الأكثر مبيعًا</h3><div id="topItems"></div></div>
+  </section>
+
+  <section id="items" class="page">
+    <div class="panel">
+      <h3>إدارة الأصناف</h3>
+      <div class="form">
+        <input id="newName" placeholder="اسم الصنف">
+        <input id="newPrice" type="number" step="0.01" placeholder="السعر">
+        <select id="newCat" class="full"></select>
+        <button class="primary full" onclick="addItem()">+ إضافة صنف</button>
+      </div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+      <div id="itemAdmin"></div>
+    </div>
+  </section>
+</main>
+</div>
+<script>
+const seed=[
+["إبريق شاي + كيك برتقال / شوكولاتة",4.60,"إبريق شاي / كيك","🍊"],
+["كعك مع شاي",2.50,"إبريق شاي / كيك","🍵"],
+["منعش الكوخ",4.50,"المشروبات","🥤"],
+["موهيتو ليمون ونعناع",2.75,"المشروبات","🍋"],
+["آيس تي خوخ",2.50,"المشروبات","🧊"],
+["شاي أخضر بالهيل / إنجليزي",2.00,"المشروبات","🍃"],
+["آيس أمريكانو",2.50,"القهوة الباردة","🧋"],
+["آيس لاتيه",3.00,"القهوة الباردة","🥛"],
+["آيس سبانش لاتيه",3.50,"القهوة الباردة","☕"],
+["آيس كراميل لاتيه",3.50,"القهوة الباردة","🍮"],
+["آيس فانيلا لاتيه",3.50,"القهوة الباردة","🤍"],
+["لاتيه كوخ إيلياء",4.50,"القهوة","☕"],
+["سبانش لاتيه",3.25,"القهوة","☕"],
+["قهوة تركية",1.50,"القهوة","🫖"],
+["أمريكانو",2.25,"القهوة","☕"],
+["كابتشينو",2.75,"القهوة","☕"],
+["لاتيه",2.75,"القهوة","🥛"],
+["سندويشة مكدوس ولبنة",1.80,"الطعام","🥪"],
+["سندويشة تركي وجبنة",3.80,"الطعام","🥪"],
+["سندويشة حلوم",2.80,"الطعام","🥪"],
+["سندويشة حلوم بالسوردو",4.80,"الطعام","🥪"],
+["سندويشة تونة",3.50,"الطعام","🥪"],
+["توست مربى وزبدة",4.50,"الطعام","🍞"],
+["صحن جرانولا باللبن",4.20,"الطعام","🥣"],
+["إندومي بخلطة الكوخ الخاصة",2.50,"الطعام","🍜"],
+["فطيرة كوخ إيلياء باللحمة",6.00,"الطعام","🥧"]
+];
+let items=JSON.parse(localStorage.getItem("kukh_items")||"null")||seed.map((x,i)=>({id:i+1,name:x[0],price:x[1],cat:x[2],icon:x[3]}));
+let sales=JSON.parse(localStorage.getItem("kukh_sales")||"[]"), cart=[], activeCat="الكل";
+const cats=()=>["الكل",...new Set(items.map(x=>x.cat))];
+function money(n){return Number(n).toFixed(2)+" JD"}
+function save(){localStorage.setItem("kukh_items",JSON.stringify(items));localStorage.setItem("kukh_sales",JSON.stringify(sales))}
+function renderCats(){document.getElementById("cats").innerHTML=cats().map(c=>`<button class="cat ${c===activeCat?"active":""}" onclick="activeCat=${JSON.stringify(c)};renderCats();renderProducts()">${c}</button>`).join("")}
+function renderProducts(){let list=activeCat==="الكل"?items:items.filter(x=>x.cat===activeCat);document.getElementById("products").innerHTML=list.map(x=>`<div class="product" onclick="addToCart(${x.id})"><div class="pic">${x.icon||"☕"}</div><div class="pbody"><div class="pname">${x.name}</div><div class="price">${money(x.price)}</div></div></div>`).join("")}
+function addToCart(id){let x=items.find(i=>i.id===id), q=cart.find(i=>i.id===id);if(q)q.qty++;else cart.push({...x,qty:1});renderCart()}
+function renderCart(){let el=document.getElementById("cart");el.innerHTML=cart.length?cart.map(x=>`<div class="cart-row"><div><b>${x.name}</b><br><small>${money(x.price)} × ${x.qty}</small></div><div class="qty"><button onclick="changeQty(${x.id},-1)">−</button><b>${x.qty}</b><button onclick="changeQty(${x.id},1)">+</button></div></div>`).join(""):`<div class="empty">لم تتم إضافة أصناف بعد</div>`;let sub=cart.reduce((s,x)=>s+x.price*x.qty,0),d=+document.getElementById("discount").value||0;document.getElementById("subtotal").textContent=money(sub);document.getElementById("grand").textContent=money(Math.max(0,sub-d))}
+function changeQty(id,n){let q=cart.find(i=>i.id===id);if(!q)return;q.qty+=n;if(q.qty<=0)cart=cart.filter(i=>i.id!==id);renderCart()}
+function clearCart(){cart=[];document.getElementById("discount").value=0;renderCart()}
+function checkout(method){if(!cart.length)return alert("الفاتورة فارغة");let total=cart.reduce((s,x)=>s+x.price*x.qty,0)- (+document.getElementById("discount").value||0);let num=String(sales.length+1).padStart(6,"0");sales.unshift({id:num,date:new Date().toISOString(),method,total,items:cart.map(x=>({name:x.name,qty:x.qty,price:x.price}))});save();alert(`تم حفظ الفاتورة #${num}\\nالإجمالي: ${money(total)}\\nالدفع: ${method}`);clearCart();renderReports();renderHistory()}
+function renderHistory(){let q=(document.getElementById("search")?.value||"").toLowerCase();let arr=sales.filter(s=>s.id.includes(q)||s.method.toLowerCase().includes(q));document.getElementById("historyTable").innerHTML=`<table class="table"><tr><th>الفاتورة</th><th>التاريخ</th><th>المبلغ</th><th>الدفع</th></tr>${arr.map(s=>`<tr><td>#${s.id}</td><td>${new Date(s.date).toLocaleString("ar-JO")}</td><td>${money(s.total)}</td><td>${s.method}</td></tr>`).join("")}</table>`}
+function renderReports(){let today=new Date().toLocaleDateString("en-CA");let a=sales.filter(s=>new Date(s.date).toLocaleDateString("en-CA")===today),sum=a.reduce((s,x)=>s+x.total,0),cash=a.filter(x=>x.method==="كاش").reduce((s,x)=>s+x.total,0),click=a.filter(x=>x.method==="Click").reduce((s,x)=>s+x.total,0);rSales.textContent=money(sum);rCount.textContent=a.length;rCash.textContent=money(cash);rClick.textContent=money(click);let m={};a.forEach(s=>s.items.forEach(i=>m[i.name]=(m[i.name]||0)+i.qty));let top=Object.entries(m).sort((a,b)=>b[1]-a[1]);document.getElementById("topItems").innerHTML=top.length?`<table class="table"><tr><th>الصنف</th><th>الكمية</th></tr>${top.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join("")}</table>`:"<div class='empty'>لا توجد مبيعات اليوم</div>"}
+function renderAdmin(){newCat.innerHTML=cats().filter(x=>x!=="الكل").map(c=>`<option>${c}</option>`).join("");itemAdmin.innerHTML=items.map(x=>`<div style="display:flex;gap:8px;align-items:center;border-bottom:1px solid var(--line);padding:9px 0"><span style="font-size:25px">${x.icon}</span><div style="flex:1"><b>${x.name}</b><br><small>${x.cat} · ${money(x.price)}</small></div><button class="secondary" onclick="editItem(${x.id})">تعديل</button><button class="secondary" onclick="deleteItem(${x.id})">حذف</button></div>`).join("")}
+function addItem(){let name=newName.value.trim(),price=+newPrice.value,cat=newCat.value;if(!name||!price)return alert("أدخل اسم الصنف والسعر");items.push({id:Date.now(),name,price,cat,icon:"☕"});save();newName.value="";newPrice.value="";renderAll()}
+function editItem(id){let x=items.find(i=>i.id===id),n=prompt("اسم الصنف",x.name),p=prompt("السعر",x.price);if(n!==null&&p!==null){x.name=n;x.price=+p;save();renderAll()}}
+function deleteItem(id){if(confirm("حذف الصنف؟")){items=items.filter(i=>i.id!==id);save();renderAll()}}
+function exportCSV(){let rows=[["الفاتورة","التاريخ","المبلغ","الدفع"],...sales.map(s=>[s.id,new Date(s.date).toLocaleString("ar-JO"),s.total,s.method])];let csv="\\ufeff"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(",")).join("\\n");let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="kukh-eliyaa-sales.csv";a.click()}
+function renderAll(){renderCats();renderProducts();renderCart();renderReports();renderHistory();renderAdmin()}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.page).classList.add("active");document.getElementById("title").textContent={sales:"الكاش",history:"سجل الفواتير",reports:"التقارير",items:"إدارة الأصناف"}[b.dataset.page]});
+document.getElementById("discount").addEventListener("input",renderCart);
+document.getElementById("date").textContent=new Date().toLocaleString("ar-JO",{dateStyle:"full",timeStyle:"short"});
+renderAll();
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");
+</script>
+</body>
+</html>
